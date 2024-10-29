@@ -1,10 +1,13 @@
 const apiUrl = "https://fakestoreapi.com/products";
 
 let productcontainer = document.getElementById("product-container");
+let favouraiteContainer = document.getElementById("favouraiteContainer");
 
 let promise = fetch(apiUrl);
 
 
+let likedData = {};
+let a;
 
 promise.then(response => {
     if(!response.ok){
@@ -13,12 +16,13 @@ promise.then(response => {
     return response.json();
 })
 .then(data => {
+    a = data;
 
   productcontainer.innerHTML = ""
 
     data.forEach(product => {
         
-        console.log(product);
+        //console.log(product);
         productcontainer.innerHTML += 
 
         `<div class="product-card" id="productcard">
@@ -40,7 +44,7 @@ promise.then(response => {
                         <span class="final-price">$: ${product.price}</span>
                     </div>
                     <div class="product-actions">
-                        <button class="wishlist"><i class="fa fa-heart"></i></button>
+                        <button class="wishlist" id="btn1" onclick="addToWishlist(${product.id})"><i class="fa fa-heart"></i></button>
                         <button class="cart"><i class="fa fa-shopping-cart"></i></button>
                     </div>
             </div>
@@ -51,3 +55,17 @@ promise.then(response => {
 .catch(error => {
     console.log("There was a problem with the fetch operation:",error);
 })
+function addToWishlist(productId) {
+    console.log('Product ID:', productId);
+
+    if(!likedData[productId]){
+        const product = a.find(Element => Element.id === productId);
+        if(product){
+            likedData[productId] = product
+            console.log(likedData)
+        }
+        else{
+            console.log("Product already added", productId);
+        }
+    }
+}
